@@ -9,17 +9,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AnalogPin implements Observer, Observable {
+    private int id;
     private final Voltage voltage = new Voltage(0);
     private LinkedList<Observer> listeners = new LinkedList();
     private int number;
     private int resolution;
     private float reference;
 
-    public AnalogPin(Voltage voltage, int number, int resolution, float reference) {
-        this.voltage.update(voltage.getScale());
+    public AnalogPin(int id,int number, int resolution, float reference) {
         this.number = number;
         this.resolution = resolution;
         this.reference = reference;
+        this.id=id;
     }
 
     
@@ -90,6 +91,10 @@ public class AnalogPin implements Observer, Observable {
 
     public Voltage getVoltage() {
         return voltage;
+    }
+
+    public int getId() {
+        return id;
     }
     
 }

@@ -1,6 +1,7 @@
 package core;
 
 import DatabaseHandlers.EventWriter;
+import Factories.AnalogPinFactory;
 import Factories.TransportFactory;
 import Servers.TransportServer;
 
@@ -170,8 +171,9 @@ public class Launcher implements Serializable {
         return conn;
     }
 
-    private static void initFactories() throws SQLException {
+    private static void initFactories() throws SQLException, IOException {
         TransportFactory.init();
+        AnalogPinFactory.init();
     }
     
 }

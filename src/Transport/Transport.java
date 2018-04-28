@@ -5,13 +5,15 @@
  */
 package Transport;
 
+import core.Observable;
+import core.Observer;
 import java.net.Socket;
 
 /**
  *
  * @author arseniy
  */
-public interface Transport extends Runnable {
+public interface Transport extends Runnable, Observer, Observable {
     
     public int getID();
     

@@ -21,7 +21,7 @@ public class AnalogPinTest {
 
     @Test
     public void testHandleEvent() {
-        AnalogPin testPin = new AnalogPin(new Voltage(0), 0, 10, 5);
+        AnalogPin testPin = new AnalogPin(0, 0, 10, 5);
         assertEquals(testPin.getVoltage().getScale(), 0,0.01);
         testPin.handleEvent(new SocketData("ACH=5,819\r\n"));
         assertEquals(testPin.getVoltage().getScale(), 0,0.01);

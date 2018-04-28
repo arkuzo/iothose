@@ -13,7 +13,7 @@ import java.io.*;
 import java.util.LinkedList;
 
 
-public class Arduino extends Thread implements Observer, Observable, Transport{
+public class Arduino extends Thread implements Transport{
     
     protected Socket socket;
     protected int id;

@@ -25,8 +25,6 @@ public class TransportFactory{
     
     private static LinkedList<Transport> boards = new LinkedList();
     private static TransportFactory factory;
-    private BufferedWriter writer;
-    private int port;
     
     private TransportFactory() throws SQLException {
         getTransportFromDb();

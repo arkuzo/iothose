@@ -64,7 +64,7 @@ public class TransportServer implements Runnable {
                 continue;
             }
             try {
-                TransportFactory.getTransport(0).setSocket(socket);
+                TransportFactory.getTransport(1).setSocket(socket);
                 EventWriter.write("Set socket for transport");
             } catch (Exception ex) {
                 EventWriter.writeError(ex.toString());
