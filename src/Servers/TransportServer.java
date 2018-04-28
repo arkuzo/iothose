@@ -6,7 +6,7 @@
 package Servers;
 
 import DatabaseHandlers.EventWriter;
-import Fabrics.TransportFactory;
+import Factories.TransportFactory;
 import core.Launcher;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -22,12 +22,24 @@ public class TransportServer implements Runnable {
     private static final ExecutorService socketExService =Executors.newCachedThreadPool();
     static private int port;
     static private TransportServer server=null;
+    static private ServerSocket ss=null;
 
-    private TransportServer(int port) {
+    private TransportServer(int port) throws ServerException, InterruptedException {
+        boolean error=true;
         this.port = port;
+        for(int i=0; i<5 && error; i++){
+            try {
+                ss = new ServerSocket(port);
+                error=false;
+            } catch (IOException ex) {
+                EventWriter.writeError("Cannot open port "+port+" to serve transport");
+                Thread.sleep(1000);
+            }
+        }
+        if(error)throw new ServerException("Cannot open port "+port+" to serve transport");
     }
     
-    static synchronized public TransportServer getServer(){
+    static synchronized public TransportServer getServer() throws ServerException, InterruptedException{
         if(server==null){
             server = new TransportServer(Launcher.getTransportPort());
         }
@@ -40,28 +52,22 @@ public class TransportServer implements Runnable {
     
     @Override
     public void run() {
-        ServerSocket ss=null;
-        try {
-            ss = new ServerSocket(port);
-        } catch (IOException ex) {
-            EventWriter.write("Cannot open port "+port+" to serve transport");
-            ex.printStackTrace();
-        }
         EventWriter.write("Started listen on port "+port+" to serve transport");
         while(!Thread.currentThread().isInterrupted()){
-            Socket socket=null;
+            Socket socket;
             try{ 
                 socket = ss.accept();
                 EventWriter.write("Connection with " + 
                         socket.getInetAddress().getHostAddress() +"established");
             } catch (IOException ex) {
-                EventWriter.write("Transport connection failed");
+                EventWriter.writeError("Transport connection failed");
+                continue;
             }
             try {
                 TransportFactory.getTransport(0).setSocket(socket);
                 EventWriter.write("Set socket for transport");
             } catch (Exception ex) {
-                EventWriter.write(ex.toString());
+                EventWriter.writeError(ex.toString());
             }
         }
         EventWriter.write("Transport server closed");

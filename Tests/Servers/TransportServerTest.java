@@ -5,7 +5,7 @@
  */
 package Servers;
 
-import Fabrics.TransportFactory;
+import Factories.TransportFactory;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -14,13 +14,14 @@ import static org.junit.Assert.*;
  * @author arseniy
  */
 public class TransportServerTest {
-    TransportServer ts = TransportServer.getServer();
+    TransportServer ts;
     
-    public TransportServerTest() {
+    public TransportServerTest() throws Exception {
+        this.ts = TransportServer.getServer();
     }
 
     @Test
-    public void testGetServer() {
+    public void testGetServer() throws Exception {
         TransportServer ts2 = TransportServer.getServer();
         assertTrue(ts2.equals(ts));
     }

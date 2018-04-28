@@ -12,6 +12,4 @@ public interface Sensor extends Observable {
     void enable();
 
     void calibrate(Object calibrationMatrix);
-
-    String toString();
 }

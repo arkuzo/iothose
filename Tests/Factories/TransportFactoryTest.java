@@ -3,27 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Fabrics;
+package Factories;
 
-import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import Factories.TransportFactory;
+import java.sql.SQLException;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 /**
  *
  * @author arseniy
  */
 public class TransportFactoryTest {
-    TransportFactory testFactory = TransportFactory.getFactory();
+    TransportFactory testFactory;
     
-    public TransportFactoryTest() {
+    public TransportFactoryTest() throws SQLException {
+        this.testFactory = TransportFactory.getFactory();
     }
     
     @Test
-    public void testGetFactory() {
+    public void testGetFactory() throws SQLException {
         TransportFactory testFactory2 = TransportFactory.getFactory();
         assertTrue(testFactory2.equals(testFactory));
     }

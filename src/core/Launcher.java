@@ -1,12 +1,14 @@
 package core;
 
 import DatabaseHandlers.EventWriter;
+import Factories.TransportFactory;
 import Servers.TransportServer;
 
 import java.io.IOException;
 import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Properties;
 import java.util.concurrent.*;
 
@@ -36,6 +38,7 @@ public class Launcher implements Serializable {
     public static void main  (String[] args) throws Exception {
         initializePorperties(args);
         startDbConnection();
+        initFactories();
         tServer=TransportServer.getServer();
         exService.submit(tServer);
         
@@ -165,6 +168,10 @@ public class Launcher implements Serializable {
 
     public static Connection getDbConnection() {
         return conn;
+    }
+
+    private static void initFactories() throws SQLException {
+        TransportFactory.init();
     }
     
 }

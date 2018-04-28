@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Fabrics;
+package Factories;
 
 /**
  *
  * @author arseniy
  */
-public class AnalogPinFactory {
+public class DigitalPinFactory {
     
 }

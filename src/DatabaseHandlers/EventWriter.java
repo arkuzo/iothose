@@ -16,6 +16,19 @@ import java.sql.SQLException;
 public class EventWriter {
     
     private static EventWriter ew = new EventWriter();
+
+    public static void writeError(String message) {
+        try{
+            String sqlRequest = "INSERT INTO event_log (event_desc,type) VALUES (?,?)";
+            PreparedStatement stmt = Launcher.getDbConnection().prepareStatement(sqlRequest);
+            stmt.setString(1, message);
+            stmt.setString(2, "error");
+            stmt.execute(); 
+        } catch (SQLException ex) {
+            System.err.println(ex);
+            //TODO fatal error logging
+        }
+    }
     
     private EventWriter(){
         
@@ -25,11 +38,8 @@ public class EventWriter {
         try{
             String sqlRequest = "INSERT INTO event_log (event_desc) VALUES (?)";
             PreparedStatement stmt = Launcher.getDbConnection().prepareStatement(sqlRequest);
-            System.out.println("Preparing statement");
             stmt.setString(1, message);
-            System.out.println("Sending "+message+" to event log");
             stmt.execute(); 
-            System.out.println("Sent");
         } catch (SQLException ex) {
             System.err.println(ex);
             //TODO fatal error logging
