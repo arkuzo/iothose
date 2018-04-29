@@ -3,6 +3,7 @@ package core;
 import DatabaseHandlers.EventWriter;
 import Factories.AnalogPinFactory;
 import Factories.TransportFactory;
+import Servers.CommandLineListener;
 import Servers.TransportServer;
 
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class Launcher implements Serializable {
     private static ExecutorService exService = Executors.newCachedThreadPool();
     private static TransportServer tServer;
     private static Connection conn;
+    private static CommandLineListener keyboardInput;
     
     /**
      * @param args
@@ -37,15 +39,17 @@ public class Launcher implements Serializable {
      * @args --remember             write configuration to file
      */
     public static void main  (String[] args) throws Exception {
-        initializePorperties(args);
+        initializeProperties(args);
         startDbConnection();
         initFactories();
+        keyboardInput=CommandLineListener.getListener();
         tServer=TransportServer.getServer();
         exService.submit(tServer);
+        exService.submit(keyboardInput);
         
     }
     
-    private static void initializePorperties(String[] args) throws IOException {
+    private static void initializeProperties(String[] args) throws IOException {
         try {
             getDbProperty();
         } catch (IOException ex) {
@@ -174,6 +178,13 @@ public class Launcher implements Serializable {
     private static void initFactories() throws SQLException, IOException {
         TransportFactory.init();
         AnalogPinFactory.init();
+    }
+
+    public static void stop() {
+        EventWriter.write("Server shutdown initialised");
+        exService.shutdown();
+        while(!exService.isTerminated());
+        EventWriter.write("Server terminated");
     }
     
 }

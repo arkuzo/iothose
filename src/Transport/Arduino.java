@@ -5,7 +5,6 @@ import Servers.SocketData;
 import Servers.SocketListener;
 import Servers.TransportServer;
 import core.Data;
-import core.Observable;
 import core.Observer;
 
 import java.net.*;
@@ -36,12 +35,16 @@ public class Arduino extends Thread implements Transport{
         socketListener.removeListener(this);
         socketListener = new SocketListener(this,socket);
         this.socket = socket;
-        try{
-            socketOutput = new DataOutputStream(socket.getOutputStream());
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+        boolean error = true;
+        for(int i=0;i<5&&error;i++)
+            try{
+                socketOutput = new DataOutputStream(socket.getOutputStream());
+                error=false;
+            } catch (IOException e){
+                EventWriter.writeError(e.toString());
+            }
         TransportServer.startListen(socketListener);
+        EventWriter.write("Connected Arduino id "+id);
     }
 
     @Override
@@ -62,7 +65,7 @@ public class Arduino extends Thread implements Transport{
             socketOutput.flush();
             //EventWriter.write("sent message "+ string);
         } catch (Exception e) {
-            e.printStackTrace();
+            EventWriter.writeError(e.toString());
         }
     }
 
@@ -97,6 +100,7 @@ public class Arduino extends Thread implements Transport{
         this.data=data;
         SocketData newData = (SocketData) data;
         this.response=newData.getResponse();
+        this.update();
         //EventWriter.write("Arduino " + this.id +" reported "+response);
     }
 
