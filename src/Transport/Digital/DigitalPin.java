@@ -1,20 +1,24 @@
 package Transport.Digital;
 
 import Servers.SocketData;
+import Transport.Pin;
 import Transport.pinMode;
 import core.*;
 import java.util.LinkedList;
 
-public class DigitalPin implements Observer, Observable {
+public class DigitalPin implements Observer, Observable, Pin {
     private int number;
+    private int id;
     private pinMode mode;
     private Data tempData;
     private final LinkedList<Observer> listeners = new LinkedList<>();
     private DigitalPinData data;
 
-    public DigitalPin(int number) {
+    public DigitalPin(int id, int number, pinMode mode) {
+        this.id = id;
         data = new DigitalPinData(pinState.LOW);
         this.number=number;
+        this.mode = mode;
     }    
     
     @Override
@@ -88,5 +92,10 @@ public class DigitalPin implements Observer, Observable {
 
     public DigitalPinData getData() {
         return data;
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 }

@@ -6,9 +6,9 @@
 package Sensors;
 
 import Sensors.data.Luminocity;
+import Sensors.data.SensorData;
 import Sensors.data.Voltage;
 import core.Data;
-import core.Observable;
 import core.Observer;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -17,9 +17,14 @@ import java.util.LinkedList;
  *
  * @author arseniy
  */
-public class AmperkaLuminocityResistor implements Observable, Observer {
+public class AmperkaLuminocityResistor implements Sensor {
     final Collection<Observer> listeners = new LinkedList<Observer>();
     final Luminocity data = new Luminocity();
+    String description;
+
+    public AmperkaLuminocityResistor(String description) {
+        this.description = description;
+    }
 
     @Override
     public void update() {
@@ -43,5 +48,27 @@ public class AmperkaLuminocityResistor implements Observable, Observer {
             this.update();
         }
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public String toString() {
+        return "Luminosity sensor "+data.toString()+" ("+
+                description+")";
+    }
+
+    @Override
+    public SensorData read() {
+        return data;
+    }
+
+    @Override
+    public void calibrate(Object calibrationMatrix) {
+        System.out.println("Sensor calibrated");
+    }
+    
+    
     
 }

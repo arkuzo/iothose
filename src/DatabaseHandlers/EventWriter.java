@@ -53,4 +53,19 @@ public class EventWriter {
     private static void errorMessage (Exception ex, String message){
         System.err.println( ex.toString() + " while writing \"" + message + "\"");
     }
+    
+    public static void sensorMessage(float scale, String unit){
+        try{
+            String sqlRequest = "INSERT INTO sensor_log (scale,unit) VALUES (?,?)";
+            PreparedStatement stmt = Launcher.getDbConnection().prepareStatement(sqlRequest);
+            stmt.setDouble(1, scale);
+            stmt.setString(2, unit);
+            stmt.execute(); 
+        } catch (SQLException ex) {
+            errorMessage(ex,"Cannot write to db");
+            //TODO fatal error logging
+        } catch (NullPointerException ex){
+            errorMessage(ex, "Cannot write to db");
+        }
+    }
 }
