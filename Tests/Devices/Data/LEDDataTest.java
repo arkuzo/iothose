@@ -3,17 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package Devices.Data;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author arseniy
  */
-public class LEDData implements DeviceData{
+public class LEDDataTest {
 
-    @Override
-    public String toString() {
-        return super.toString(); //To change body of generated methods, choose Tools | Templates.
+    public LEDDataTest() {
     }
-    
+
+    @Test
+    public void testToString() {
+    }
+
 }

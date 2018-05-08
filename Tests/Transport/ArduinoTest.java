@@ -5,48 +5,69 @@
  */
 package Transport;
 
+import Servers.*;
+import java.io.UnsupportedEncodingException;
+import java.net.UnknownHostException;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 
 /**
  *
  * @author arseniy
  */
 public class ArduinoTest {
+    FakeInputStream fis = new FakeInputStream();
+    FakeSocket fs = new FakeSocket(fis);
+    FakeListener fl = new FakeListener();
+    FakeOutputStream fos;
+    Arduino ard;
     
     public ArduinoTest() {
     }
-
-    @Test
-    public void testSetSocket() {
+    
+    @Before
+    public void setUp () throws UnknownHostException{
+        fos = fs.getFos();
+        ard = new Arduino(0, fs, "test");
     }
 
     @Test
-    public void testGetID() {
+    public void testSetSocket() throws UnknownHostException {
+        FakeSocket fs2 = new FakeSocket(fis);
+        SocketListener sl = ard.getSocketListener();
+        assertEquals(ard.getSocketListener(), sl);
+        ard.setSocket(fs2);
+        assertNotEquals(ard.getSocketListener(), sl);
+        
     }
 
     @Test
-    public void testSend() {
+    public void testGetID() throws UnknownHostException {
+        assertEquals(ard.getID(), 0);
     }
 
     @Test
-    public void testIsActive() {
+    public void testSend() throws UnknownHostException {
+        ard.send("asdf");
+        assertEquals("asdf", fos.getOutput());
     }
 
     @Test
-    public void testUpdate() {
+    public void testIsActive() throws UnsupportedEncodingException, InterruptedException {
+        ard.send("AT\r\n");
+        assertEquals("AT\r\n", fos.getOutput());
+        fis.setInput("OK\r\n");
+        assertTrue(ard.isActive());
     }
 
     @Test
-    public void testAddListener() {
-    }
-
-    @Test
-    public void testRemoveListener() {
-    }
-
-    @Test
-    public void testHandleEvent() {
+    public void testTransportFunctions() throws UnsupportedEncodingException, InterruptedException {
+        ard.addListener(fl);
+        ard.handleEvent(new SocketData("OK\r\n"));
+        Thread.sleep(20);
+        SocketData tData = (SocketData)fl.getData();
+        assertEquals(tData.getResponse(),"OK\r\n");
     }
     
 }

@@ -23,6 +23,7 @@ public class TransportServer implements Runnable {
     static private int port;
     static private TransportServer server=null;
     static private ServerSocket ss=null;
+    static private Socket socket;
 
     private TransportServer(int port) throws ServerException, InterruptedException {
         boolean error=true;
@@ -36,7 +37,6 @@ public class TransportServer implements Runnable {
                 Thread.sleep(1000);
             }
         }
-        if(error)throw new ServerException("Cannot open port "+port+" to serve transport");
     }
     
     static synchronized public TransportServer getServer() throws ServerException, InterruptedException{
@@ -52,10 +52,9 @@ public class TransportServer implements Runnable {
     
     @Override
     public void run() {
-        EventWriter.write("Started listen on port "+port+" to serve transport");
         while(!Thread.currentThread().isInterrupted()){
-            Socket socket;
             try{ 
+                EventWriter.write("Started listen on port "+port+" to serve transport");
                 socket = ss.accept();
                 EventWriter.write("Connection with " + 
                         socket.getInetAddress().getHostAddress() +"established");
@@ -64,10 +63,13 @@ public class TransportServer implements Runnable {
                 continue;
             }
             try {
+                if(socket==null){
+                    System.out.println("It seems that we lost socket");
+                }
                 TransportFactory.getTransport(1).setSocket(socket);
                 EventWriter.write("Set socket for transport");
-            } catch (Exception ex) {
-                EventWriter.writeError(ex.toString());
+            } catch (IOException ex) {
+                EventWriter.writeError("Error binding socket\n"+ex.toString());
             }
         }
         EventWriter.write("Transport server closed");

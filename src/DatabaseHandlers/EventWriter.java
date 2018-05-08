@@ -25,8 +25,10 @@ public class EventWriter {
             stmt.setString(2, "error");
             stmt.execute(); 
         } catch (SQLException ex) {
-            System.err.println(ex);
+            errorMessage(ex, message);
             //TODO fatal error logging
+        } catch (NullPointerException ex){
+            errorMessage(ex, message);
         }
     }
     
@@ -41,8 +43,14 @@ public class EventWriter {
             stmt.setString(1, message);
             stmt.execute(); 
         } catch (SQLException ex) {
-            System.err.println(ex);
+            errorMessage(ex, message);
             //TODO fatal error logging
+        } catch (NullPointerException ex){
+            errorMessage(ex, message);
         }
+    }
+    
+    private static void errorMessage (Exception ex, String message){
+        System.err.println( ex.toString() + " while writing \"" + message + "\"");
     }
 }

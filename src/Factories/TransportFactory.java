@@ -26,12 +26,17 @@ public class TransportFactory{
     private static LinkedList<Transport> boards = new LinkedList();
     private static TransportFactory factory;
     
-    private TransportFactory() throws SQLException {
+    private TransportFactory() {
+        try{
         getTransportFromDb();
+        } catch(SQLException e) {
+            boards.add(new Arduino(0, "test"));
+            Launcher.stop();
+        }
     }
     
     public static void init() throws SQLException{
-        factory=new TransportFactory();
+        factory=TransportFactory.getFactory();
     }
     
     public static synchronized TransportFactory getFactory() throws SQLException{
@@ -44,6 +49,7 @@ public class TransportFactory{
     public static Transport getTransport (int id) throws UnknownHostException, IOException{
         for (Transport b : boards) {
             if(b.getID()==id){
+                EventWriter.write("returning "+b.toString());
                 return b;
             }
         }
@@ -63,6 +69,11 @@ public class TransportFactory{
             boards.add(new Arduino(id, description));
         }
         EventWriter.write("Loaded boards from db");
+        StringBuffer sb = new StringBuffer();
+        for(Transport b:boards){
+            sb.append(b+"\r\n");
+        }
+        EventWriter.write(sb.toString());
     }
     
     private void addTransportToDb(){

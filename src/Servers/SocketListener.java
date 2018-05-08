@@ -17,20 +17,21 @@ public class SocketListener extends Thread implements Observable {
     private int length;
 
     public SocketListener(Observer listener, Socket toListen) {
+        EventWriter.write("Creating listener from "+toListen.getInetAddress().getHostAddress());
         this.listener = listener;
         this.toListen = toListen;
         try{
             socketInput = new DataInputStream(toListen.getInputStream());
         } catch (IOException e){
-            e.printStackTrace();
+            EventWriter.writeError("Error creating socketListener" + e.toString());
         }
     }
     
     
 
     public void run(){
-        //EventWriter.write("Started listen from "+toListen.getInetAddress()+" in thread "
-        //        +currentThread().getName());
+        EventWriter.write("Started listen from "+toListen.getInetAddress()+" in thread "
+                +currentThread().getName());
         while(!currentThread().isInterrupted()) {
             try {
                 if (socketInput.available() > 0) {

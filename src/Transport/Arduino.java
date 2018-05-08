@@ -32,16 +32,19 @@ public class Arduino extends Thread implements Transport{
 
     @Override
     public final void setSocket(Socket socket) {
-        socketListener.removeListener(this);
+        System.out.println("Started binding socket");
+        if(socketListener!=null)
+            socketListener.removeListener(this);
         socketListener = new SocketListener(this,socket);
         this.socket = socket;
         boolean error = true;
+        socketListener.addListener(this);
         for(int i=0;i<5&&error;i++)
             try{
                 socketOutput = new DataOutputStream(socket.getOutputStream());
                 error=false;
             } catch (IOException e){
-                EventWriter.writeError(e.toString());
+                EventWriter.writeError("Transport cannot see socket"+e.toString());
             }
         TransportServer.startListen(socketListener);
         EventWriter.write("Connected Arduino id "+id);
@@ -75,7 +78,7 @@ public class Arduino extends Thread implements Transport{
             Thread.sleep(1000);
         } catch (InterruptedException e) {
         }
-        return response.matches("\\s+OK\\s+");
+        return response.matches("OK\\s+");
     }
 
     @Override
@@ -104,4 +107,13 @@ public class Arduino extends Thread implements Transport{
         //EventWriter.write("Arduino " + this.id +" reported "+response);
     }
 
+    @Override
+    public String toString() {
+        return "Arduino "+String.valueOf(id)+' '+description;
+    }
+
+    public SocketListener getSocketListener() {
+        return socketListener;
+    }
+    
 }

@@ -14,38 +14,38 @@ import java.util.ArrayList;
  *
  * @author arseniy
  */
-class FakeInputStream extends InputStream{
-    private byte[] output = new byte[0];
+public class FakeInputStream extends InputStream{
+    private byte[] input = new byte[0];
     private int cursor=0;
 
     @Override
     public int available() throws IOException {
-        if(output!=null){
-            if(cursor<output.length)
-                return output.length-cursor;
+        if(input!=null){
+            if(cursor<input.length)
+                return input.length-cursor;
         }
         return 0;
     }
 
     @Override
     public int read() throws IOException {
-        if(cursor>=output.length){
+        if(cursor>=input.length){
             cursor=0;
-            output=null;
+            input=null;
             return -1;
         }
-        return output[cursor++];
+        return input[cursor++];
     }
 
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
-        if(output==null)
+        if(input==null)
             return 0;
-        if(off+len>=output.length)
-            len=output.length-off;
+        if(off+len>=input.length)
+            len=input.length-off;
         ArrayList<Byte> al = new ArrayList();
         for(cursor=0;cursor<len;cursor++){
-            al.add(output[off+cursor]);
+            al.add(input[off+cursor]);
         }
         for(cursor=0;cursor<len;cursor++){
             b[cursor]=al.get(cursor);
@@ -54,14 +54,14 @@ class FakeInputStream extends InputStream{
             b[cursor]=0;
         }
         int oldCursor=cursor;
-        output=null;
+        input=null;
         cursor=0;
         return oldCursor;
     }
     
     
     
-    public void setOutput (String toInsert) throws UnsupportedEncodingException{
-        output=toInsert.getBytes("ASCII");
+    public void setInput (String toInsert) throws UnsupportedEncodingException{
+        input=toInsert.getBytes("ASCII");
     }
 }

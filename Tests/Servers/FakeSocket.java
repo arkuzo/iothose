@@ -7,6 +7,7 @@ package Servers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Proxy;
 import java.net.Socket;
@@ -17,12 +18,16 @@ import java.net.Socket;
  */
 public class FakeSocket extends Socket {
     FakeInputStream fis;
+    FakeOutputStream fos = new FakeOutputStream();
 
     public FakeSocket(FakeInputStream fis) {
         this.fis = fis;
     }
 
-  
+    @Override
+    public OutputStream getOutputStream() throws IOException {
+        return fos; //To change body of generated methods, choose Tools | Templates.
+    }
     
     @Override
     public InetAddress getInetAddress() {
@@ -43,9 +48,9 @@ public class FakeSocket extends Socket {
     public boolean isClosed() {
         return false;
     }
-    
-    public void send(){
-       
+
+    public FakeOutputStream getFos() {
+        return fos;
     }
     
 }

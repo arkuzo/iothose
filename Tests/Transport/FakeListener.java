@@ -4,20 +4,22 @@
  * and open the template in the editor.
  */
 package Transport;
-
-import Servers.SocketListener;
-import core.Observable;
+import core.Data;
 import core.Observer;
-import java.net.Socket;
 
 /**
  *
  * @author arseniy
  */
-public interface Transport extends Runnable, Observer, Observable {
-    
-    public int getID();
-    
-    public void setSocket(Socket socket);
-    
+public class FakeListener implements Observer {
+    Data data;
+
+    @Override
+    public void handleEvent(Data data) {
+        this.data=data;
+    }
+
+    public Data getData() {
+        return data;
+    }
 }

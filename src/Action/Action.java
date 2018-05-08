@@ -9,6 +9,8 @@ import core.Data;
 import core.Observable;
 import core.Observer;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,7 +18,7 @@ import java.util.LinkedList;
  */
 public class Action implements Observer, Observable{
     LinkedList<Observer> listeners = new LinkedList<>();
-    Behavior beh = new Behavior();
+    //Behavior beh = new Behavior();
     Data inputData;
 
     @Override
@@ -27,7 +29,12 @@ public class Action implements Observer, Observable{
 
     @Override
     public void update() {
-        listeners.stream().forEach(x -> {x.handleEvent(beh.compute());});
+        try {
+            throw new Exception ("Does not realized");
+            // listeners.stream().forEach(x -> {x.handleEvent(beh.compute());});
+        } catch (Exception ex) {
+            Logger.getLogger(Action.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

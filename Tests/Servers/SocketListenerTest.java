@@ -34,7 +34,7 @@ public class SocketListenerTest {
         DataInputStream dis =new DataInputStream(fis);
         assertTrue(fis.available()==0);
         for(String s:outStrings){
-            fis.setOutput(s);
+            fis.setInput(s);
             assertTrue(dis.available()>0);
             byte[] response=new byte[s.length()];
             dis.read(response);
@@ -49,7 +49,7 @@ public class SocketListenerTest {
         executorService.submit(sl);
         sl.addListener(tl);
         for(String s:outStrings){
-            fis.setOutput(s);
+            fis.setInput(s);
             Thread.sleep(20);
             assertEquals(tl.getData().getResponse(),s);
         }

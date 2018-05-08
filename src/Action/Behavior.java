@@ -12,11 +12,8 @@ import core.Data;
  *
  * @author arseniy
  */
-public class Behavior {
-    Data inputData;
-    Data outputData;
+interface Behavior {
     
-    Data compute(){
-        return new LEDData();
-    }
+    Data compute(Data inputData);
+    
 }

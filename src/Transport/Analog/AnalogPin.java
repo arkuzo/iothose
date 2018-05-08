@@ -1,20 +1,19 @@
 package Transport.Analog;
 
+import DatabaseHandlers.EventWriter;
 import Sensors.data.Voltage;
 import Servers.SocketData;
 import com.sun.media.sound.InvalidDataException;
 import core.*;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class AnalogPin implements Observer, Observable {
-    private int id;
+    private final int id;
     private final Voltage voltage = new Voltage(0);
     private LinkedList<Observer> listeners = new LinkedList();
-    private int number;
-    private int resolution;
-    private float reference;
+    private final int number;
+    private final int resolution;
+    private final float reference;
 
     public AnalogPin(int id,int number, int resolution, float reference) {
         this.number = number;
@@ -31,7 +30,7 @@ public class AnalogPin implements Observer, Observable {
             try {
                 parseInput((SocketData)data);
             } catch (InvalidDataException ex) {
-                System.err.println(ex);
+                EventWriter.writeError(ex.toString());
             }
         }
         this.update();
@@ -86,6 +85,7 @@ public class AnalogPin implements Observer, Observable {
             if(value>(float)Math.pow(2,resolution))
                 throw new InvalidDataException("Analog value failure");
             this.voltage.update(value/(float)Math.pow(2,resolution)*reference);
+            EventWriter.write(this.toString());
         }
     }
 
