@@ -2,6 +2,7 @@ package core;
 
 import DatabaseHandlers.EventWriter;
 import Factories.PinFactory;
+import Factories.SensorFactory;
 import Factories.TransportFactory;
 import Servers.CommandLineListener;
 import Servers.TransportServer;
@@ -178,6 +179,7 @@ public class Launcher implements Serializable {
     private static void initFactories() throws SQLException, IOException {
         TransportFactory.init();
         PinFactory.init();
+        SensorFactory.init();
     }
 
     public static void stop() {

@@ -6,7 +6,7 @@
 package Factories;
 
 import DatabaseHandlers.EventWriter;
-import Sensors.AmperkaLuminocityResistor;
+import Sensors.AmperkaLuminocitySensor;
 import Sensors.Sensor;
 import Transport.Analog.AnalogPin;
 import core.Launcher;
@@ -25,7 +25,7 @@ public class SensorFactory {
     private static SensorFactory factory;
     
     private SensorFactory() throws SQLException, IOException {
-        getPinsFromDb();
+        getSensorsFromDb();
     }
     
     public static void init() throws SQLException, IOException{
@@ -39,7 +39,7 @@ public class SensorFactory {
         return factory;
     }    
 
-    private void getPinsFromDb() throws SQLException, IOException {
+    private void getSensorsFromDb() throws SQLException, IOException {
         PreparedStatement stmt = Launcher.getDbConnection().
                 prepareCall("SELECT * "
                         + "FROM sensor");
@@ -49,19 +49,15 @@ public class SensorFactory {
             int pinId = rs.getInt("pin_id");
             String description = rs.getString("description");
             String type = rs.getString("type");
-            Sensor sensor=null;
+            Sensor sensor;
             switch(type){
-                case "AmperkaLuminocityResistor":
-                    sensor = new AmperkaLuminocityResistor(description);
+                case "AmperkaLuminocitySensor":
+                    sensor = new AmperkaLuminocitySensor(id,description);
                     break;
                 default:
-                    break;
+                    throw new RuntimeException("Unknown sensor type in database");
             }
-            if(sensor!=null){
-                sensors.add(sensor);
-            } else {
-                throw new RuntimeException("Unknown sensor type in database");
-            }
+            sensors.add(sensor);
             PinFactory.getPinById(pinId).addListener(sensor);
         }
         EventWriter.write("Loaded sensors from db");

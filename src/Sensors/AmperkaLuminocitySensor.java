@@ -5,6 +5,7 @@
  */
 package Sensors;
 
+import DatabaseHandlers.EventWriter;
 import Sensors.data.Luminocity;
 import Sensors.data.SensorData;
 import Sensors.data.Voltage;
@@ -17,13 +18,17 @@ import java.util.LinkedList;
  *
  * @author arseniy
  */
-public class AmperkaLuminocityResistor implements Sensor {
+public class AmperkaLuminocitySensor implements Sensor {
+    int id;
     final Collection<Observer> listeners = new LinkedList<Observer>();
     final Luminocity data = new Luminocity();
     String description;
 
-    public AmperkaLuminocityResistor(String description) {
+    public AmperkaLuminocitySensor(int id, String description) {
+        this.id=id;
         this.description = description;
+        EventWriter.write("Created Lightness sensor #"
+                +id+" ("+this.description+")");
     }
 
     @Override
@@ -45,6 +50,7 @@ public class AmperkaLuminocityResistor implements Sensor {
     public void handleEvent(Data data) {
         if(data instanceof Voltage){
             this.data.update(5-((Voltage) data).getScale());
+            EventWriter.sensorMessage(id,(float) this.data.getScale(), "lumen");
             this.update();
         }
     }

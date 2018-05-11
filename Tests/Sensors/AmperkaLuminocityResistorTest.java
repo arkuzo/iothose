@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  * @author arseniy
  */
 public class AmperkaLuminocityResistorTest {
-    AmperkaLuminocityResistor alr = new AmperkaLuminocityResistor("test");
+    AmperkaLuminocitySensor alr = new AmperkaLuminocitySensor(0,"test");
 
     public AmperkaLuminocityResistorTest() {
     }

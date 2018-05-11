@@ -54,12 +54,13 @@ public class EventWriter {
         System.err.println( ex.toString() + " while writing \"" + message + "\"");
     }
     
-    public static void sensorMessage(float scale, String unit){
+    public static void sensorMessage(int sensorId, float scale, String unit){
         try{
-            String sqlRequest = "INSERT INTO sensor_log (scale,unit) VALUES (?,?)";
+            String sqlRequest = "INSERT INTO sensor_log (sensor_id,scale,unit) VALUES (?,?,?)";
             PreparedStatement stmt = Launcher.getDbConnection().prepareStatement(sqlRequest);
-            stmt.setDouble(1, scale);
-            stmt.setString(2, unit);
+            stmt.setInt(1, sensorId);
+            stmt.setDouble(2, scale);
+            stmt.setString(3, unit);
             stmt.execute(); 
         } catch (SQLException ex) {
             errorMessage(ex,"Cannot write to db");
