@@ -8,7 +8,6 @@ package Factories;
 import DatabaseHandlers.EventWriter;
 import Transport.Analog.AnalogPin;
 import Transport.Digital.DigitalPin;
-import Transport.Pin;
 import Transport.pinMode;
 import core.Launcher;
 import java.io.IOException;
@@ -17,38 +16,39 @@ import java.sql.ResultSet;
 import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.LinkedList;
+import Transport.BoardInterface;
 
 /**
  *
  * @author arseniy
  */
-public class PinFactory {
+public class BoardIntefaceFactory {
     
-    private static LinkedList<Pin> pins = new LinkedList();
-    private static PinFactory factory;
+    private static LinkedList<BoardInterface> boardInterfaces = new LinkedList();
+    private static BoardIntefaceFactory factory;
     
-    private PinFactory() throws SQLException, IOException {
-        getPinsFromDb();
+    private BoardIntefaceFactory() throws SQLException, IOException {
+        getBoardInterfacesFromDb();
     }
     
     public static void init() throws SQLException, IOException{
-        factory=new PinFactory();
+        factory=new BoardIntefaceFactory();
     }
     
-    public static synchronized PinFactory getFactory() throws SQLException, IOException{
+    public static synchronized BoardIntefaceFactory getFactory() throws SQLException, IOException{
         if (factory == null){
-            factory = new PinFactory();
+            factory = new BoardIntefaceFactory();
         }
         return factory;
     }    
 
-    private void getPinsFromDb() throws SQLException, IOException {
+    private void getBoardInterfacesFromDb() throws SQLException, IOException {
         PreparedStatement stmt = Launcher.getDbConnection().
                 prepareCall("SELECT * "
-                        + "FROM pin");
+                        + "FROM board_interface");
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
-            Pin pin;
+            BoardInterface bInterface;
             int id = rs.getInt("id");
             int number = rs.getInt("number");
             int trasnportId = rs.getInt("transport_id");
@@ -57,7 +57,7 @@ public class PinFactory {
                 case "analog":
                     int resolution = rs.getInt("resolution");
                     float reference = rs.getFloat("reference_voltage");
-                    pin = new AnalogPin(id,number,resolution,reference);
+                    bInterface = new AnalogPin(id,number,resolution,reference);
                     break;
                 case "digital":
                     boolean pinIsInput = rs.getBoolean("is_input");
@@ -67,26 +67,27 @@ public class PinFactory {
                     } else {
                         mode = pinMode.OUTPUT;
                     }
-                    pin=new DigitalPin(id, number, mode);
+                    bInterface=new DigitalPin(id, number, mode);
                     break;
                 default:
-                    throw new SQLDataException("FATAL Cannot recognize pin #"+id+" mode");
+                    throw new SQLDataException("FATAL Cannot recognize board "
+                            + "interface id:"+id);
             }
-            pins.add(pin);
-            TransportFactory.getTransport(trasnportId).addListener(pin);
+            boardInterfaces.add(bInterface);
+            TransportFactory.getTransport(trasnportId).addListener(bInterface);
         }
-        EventWriter.write("Loaded pins from db");
+        EventWriter.write("Loaded board interfaces from db");
     }
     
-    static Pin getPinById(int id){
-        Pin returnPin=null;
-        for(Pin a:pins){
+    static BoardInterface getInterfaceById(int id){
+        BoardInterface returnIface=null;
+        for(BoardInterface a:boardInterfaces){
             if(a.getId()==id)
-                returnPin=a;
+                returnIface=a;
         }
-        if(returnPin!=null)
-            return returnPin;
+        if(returnIface!=null)
+            return returnIface;
         else
-            throw new NullPointerException("Pin with id "+id+"not found in database");
+            throw new NullPointerException("Board interface with id "+id+"not found in database");
     }
 }

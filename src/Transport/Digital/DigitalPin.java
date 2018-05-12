@@ -1,12 +1,12 @@
 package Transport.Digital;
 
 import Servers.SocketData;
-import Transport.Pin;
 import Transport.pinMode;
 import core.*;
 import java.util.LinkedList;
+import Transport.BoardInterface;
 
-public class DigitalPin implements Observer, Observable, Pin {
+public class DigitalPin implements Observer, Observable, BoardInterface {
     private int number;
     private int id;
     private pinMode mode;

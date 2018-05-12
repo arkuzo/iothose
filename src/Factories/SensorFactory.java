@@ -58,7 +58,7 @@ public class SensorFactory {
                     throw new RuntimeException("Unknown sensor type in database");
             }
             sensors.add(sensor);
-            PinFactory.getPinById(pinId).addListener(sensor);
+            BoardIntefaceFactory.getInterfaceById(pinId).addListener(sensor);
         }
         EventWriter.write("Loaded sensors from db");
     }

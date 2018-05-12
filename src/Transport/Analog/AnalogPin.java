@@ -3,12 +3,12 @@ package Transport.Analog;
 import DatabaseHandlers.EventWriter;
 import Sensors.data.Voltage;
 import Servers.SocketData;
-import Transport.Pin;
 import com.sun.media.sound.InvalidDataException;
 import core.*;
 import java.util.LinkedList;
+import Transport.BoardInterface;
 
-public class AnalogPin implements Observer, Observable, Pin {
+public class AnalogPin implements Observer, Observable, BoardInterface {
     private final int id;
     private final Voltage voltage = new Voltage(0);
     private LinkedList<Observer> listeners = new LinkedList();

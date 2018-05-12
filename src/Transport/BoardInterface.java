@@ -12,6 +12,6 @@ import core.Observer;
  *
  * @author arseniy
  */
-public interface Pin extends Observable, Observer {
+public interface BoardInterface extends Observable, Observer {
     int getId();
 }
