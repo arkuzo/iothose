@@ -15,6 +15,7 @@ public class AnalogPin implements Observer, Observable, BoardInterface {
     private final int number;
     private final int resolution;
     private final float reference;
+    private boolean updated=false;
 
     public AnalogPin(int id,int number, int resolution, float reference) {
         this.number = number;
@@ -34,11 +35,14 @@ public class AnalogPin implements Observer, Observable, BoardInterface {
                 EventWriter.writeError(ex.toString());
             }
         }
-        this.update();
+        if(this.updated){
+            this.notifyListeners();
+            updated=false;
+        }
     }
 
     @Override
-    public void update() {
+    public void notifyListeners() {
         listeners.forEach((a) -> a.handleEvent(voltage));
     }
 
@@ -87,6 +91,7 @@ public class AnalogPin implements Observer, Observable, BoardInterface {
                 throw new InvalidDataException("Analog value failure");
             this.voltage.update(value/(float)Math.pow(2,resolution)*reference);
             EventWriter.write(this.toString());
+            updated = true;
         }
     }
 

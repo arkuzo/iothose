@@ -1,7 +1,7 @@
 package core;
 
 public interface Observable {
-    void update ();
+    void notifyListeners ();
 
     void addListener(Observer listener);
 

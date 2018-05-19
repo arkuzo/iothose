@@ -38,7 +38,7 @@ public class SocketListener extends Thread implements Observable {
                     length=socketInput.available();
                     //EventWriter.write("Something received, gonna check it");
                     socketInput.read(response);
-                    update();
+                    notifyListeners();
                 }
             } catch (IOException e) {
                 EventWriter.write(e.toString());
@@ -47,7 +47,7 @@ public class SocketListener extends Thread implements Observable {
     }
 
     @Override
-    public void update() {
+    public void notifyListeners() {
         try {
             listener.handleEvent(new SocketData(new String(response,0,length,"ASCII")));
             //EventWriter.write("Sent " + new String(response,0,length,"ASCII") + " to observer");

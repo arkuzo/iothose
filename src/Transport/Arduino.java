@@ -82,7 +82,7 @@ public class Arduino extends Thread implements Transport{
     }
 
     @Override
-    public void update() {
+    public void notifyListeners() {
         listeners.forEach((x) -> x.handleEvent(data));
     }
 
@@ -103,7 +103,7 @@ public class Arduino extends Thread implements Transport{
         this.data=data;
         SocketData newData = (SocketData) data;
         this.response=newData.getResponse();
-        this.update();
+        this.notifyListeners();
         //EventWriter.write("Arduino " + this.id +" reported "+response);
     }
 

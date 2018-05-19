@@ -32,7 +32,7 @@ public class AmperkaLuminocitySensor implements Sensor {
     }
 
     @Override
-    public void update() {
+    public void notifyListeners() {
         listeners.forEach((x) -> x.handleEvent(data));
     }
 
@@ -51,7 +51,7 @@ public class AmperkaLuminocitySensor implements Sensor {
         if(data instanceof Voltage){
             this.data.update(5-((Voltage) data).getScale());
             EventWriter.sensorMessage(id,(float) this.data.getScale(), "lumen");
-            this.update();
+            this.notifyListeners();
         }
     }
 
@@ -74,7 +74,4 @@ public class AmperkaLuminocitySensor implements Sensor {
     public void calibrate(Object calibrationMatrix) {
         System.out.println("Sensor calibrated");
     }
-    
-    
-    
 }

@@ -13,6 +13,7 @@ public class DigitalPin implements Observer, Observable, BoardInterface {
     private Data tempData;
     private final LinkedList<Observer> listeners = new LinkedList<>();
     private DigitalPinData data;
+    private boolean updated=false;
 
     public DigitalPin(int id, int number, pinMode mode) {
         this.id = id;
@@ -25,12 +26,15 @@ public class DigitalPin implements Observer, Observable, BoardInterface {
     public void handleEvent(Data data) {
         if(data instanceof SocketData){
             parseInput((SocketData)data);
-            this.update();
+        }
+        if(this.updated){
+            this.notifyListeners();
+            this.updated=false;
         }
     }
 
     @Override
-    public void update() {
+    public void notifyListeners() {
         listeners.forEach((o) -> {
             o.handleEvent(tempData);
         });
@@ -71,6 +75,7 @@ public class DigitalPin implements Observer, Observable, BoardInterface {
             }
             try{
                 setDigitalData(value);
+                this.updated=true;
             } catch(IllegalArgumentException e){
                 System.err.println(e);
             }

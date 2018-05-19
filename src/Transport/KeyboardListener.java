@@ -25,7 +25,7 @@ public class KeyboardListener extends Thread implements Observable{
                 if(br.ready()){
                     inputString=br.readLine();
                     inputString=inputString+"+";
-                    update();
+                    notifyListeners();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -39,7 +39,7 @@ public class KeyboardListener extends Thread implements Observable{
     }
 
     @Override
-    public void update() {
+    public void notifyListeners() {
         listener.handleEvent(new SocketData(inputString));
     }
 

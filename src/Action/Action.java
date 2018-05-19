@@ -24,11 +24,11 @@ public class Action implements Observer, Observable{
     @Override
     public void handleEvent(Data data) {
         this.inputData=data;
-        this.update();
+        this.notifyListeners();
     }
 
     @Override
-    public void update() {
+    public void notifyListeners() {
         try {
             throw new Exception ("Does not realized");
             // listeners.stream().forEach(x -> {x.handleEvent(beh.compute());});
