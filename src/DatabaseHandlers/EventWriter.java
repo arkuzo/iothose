@@ -54,7 +54,7 @@ public class EventWriter {
         System.err.println( ex.toString() + " while writing \"" + message + "\"");
     }
     
-    public static void sensorMessage(int sensorId, float scale, String unit){
+    public static void sensorMessage(int sensorId, double scale, String unit){
         try{
             String sqlRequest = "INSERT INTO sensor_log (sensor_id,scale,unit) VALUES (?,?,?)";
             PreparedStatement stmt = Launcher.getDbConnection().prepareStatement(sqlRequest);

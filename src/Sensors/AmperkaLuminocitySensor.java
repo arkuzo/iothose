@@ -50,7 +50,7 @@ public class AmperkaLuminocitySensor implements Sensor {
     public void handleEvent(Data data) {
         if(data instanceof Voltage){
             this.data.update(5-((Voltage) data).getScale());
-            EventWriter.sensorMessage(id,(float) this.data.getScale(), "lumen");
+            EventWriter.sensorMessage(id,(float) this.data.getScale(), "lux");
             this.notifyListeners();
         }
     }

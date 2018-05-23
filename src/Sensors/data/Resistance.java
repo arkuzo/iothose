@@ -9,26 +9,26 @@ package Sensors.data;
  *
  * @author arseniy
  */
-public class Luminocity implements SensorData {
+public class Resistance implements SensorData{
     
-    float lux;
+    double ohms;
 
-    public Luminocity() {
-        lux=0;
+    public Resistance() {
+        ohms=0;
     }
 
-    public Luminocity(float lumens) {
-        this.lux = lumens;
+    public Resistance(double ohms) {
+        this.ohms = ohms;
     }
 
     @Override
     public double getScale() {
-        return lux;
+        return ohms;
     }
 
     @Override
     public void update(double scale) {
-        this.lux =(float) scale;
+        ohms=scale;
     }
     
 }

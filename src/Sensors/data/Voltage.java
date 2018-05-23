@@ -10,9 +10,9 @@ package Sensors.data;
  * @author arseniy
  */
 public class Voltage implements SensorData {
-    private float voltage;
+    private double voltage;
  
-    public Voltage(float voltage) {
+    public Voltage(double voltage) {
         this.voltage = voltage;
     }
     

@@ -9,26 +9,26 @@ package Sensors.data;
  *
  * @author arseniy
  */
-public class Luminocity implements SensorData {
+public class Temperature implements SensorData{
     
-    float lux;
+    private double temperature;
 
-    public Luminocity() {
-        lux=0;
+    public Temperature() {
+        temperature=0;
     }
 
-    public Luminocity(float lumens) {
-        this.lux = lumens;
+    public Temperature(double temperature) {
+        this.temperature = temperature;
     }
-
+    
     @Override
     public double getScale() {
-        return lux;
+        return temperature;
     }
 
     @Override
     public void update(double scale) {
-        this.lux =(float) scale;
+        this.temperature = scale;
     }
     
 }

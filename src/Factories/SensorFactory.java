@@ -8,6 +8,8 @@ package Factories;
 import DatabaseHandlers.EventWriter;
 import Sensors.AmperkaLuminocitySensor;
 import Sensors.Sensor;
+import Sensors.SnsTmp10KThermometer;
+import Sensors.data.Resistance;
 import Transport.Analog.AnalogPin;
 import core.Launcher;
 import java.io.IOException;
@@ -49,10 +51,17 @@ public class SensorFactory {
             int pinId = rs.getInt("pin_id");
             String description = rs.getString("description");
             String type = rs.getString("type");
+            double pulldown = rs.getDouble("pulldownResistor");
             Sensor sensor;
             switch(type){
                 case "AmperkaLuminocitySensor":
                     sensor = new AmperkaLuminocitySensor(id,description);
+                    break;
+                case "SNS-TMP10K":
+                    AnalogPin ap = (AnalogPin)BoardIntefaceFactory.getInterfaceById(pinId);
+                    sensor = new SnsTmp10KThermometer(
+                        ap.getReferenceVoltage(),new Resistance(pulldown),
+                               id);
                     break;
                 default:
                     throw new RuntimeException("Unknown sensor type in database");
