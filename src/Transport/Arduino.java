@@ -32,7 +32,6 @@ public class Arduino extends Thread implements Transport{
 
     @Override
     public final void setSocket(Socket socket) {
-        System.out.println("Started binding socket");
         if(socketListener!=null)
             socketListener.removeListener(this);
         socketListener = new SocketListener(this,socket);

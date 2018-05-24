@@ -49,7 +49,6 @@ public class TransportFactory{
     public static Transport getTransport (int id) throws UnknownHostException, IOException{
         for (Transport b : boards) {
             if(b.getID()==id){
-                EventWriter.write("returning "+b.toString());
                 return b;
             }
         }

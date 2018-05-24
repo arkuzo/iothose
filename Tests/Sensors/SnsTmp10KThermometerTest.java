@@ -21,14 +21,15 @@ public class SnsTmp10KThermometerTest {
     }
 
     @Test
-    public void testSomeMethod() {
+    public void testSomeMethod() throws InterruptedException {
         SnsTmp10KThermometer therm = new SnsTmp10KThermometer(
                 new Voltage(5.0), new Resistance(9090.9),0);
         FakeListener fl = new FakeListener();
         therm.addListener(fl);
         therm.handleEvent(new Voltage(2.283));
         assertEquals(therm.resistance.getScale(), 10821, 100);
-        assertEquals(therm.data.getScale(), 22.9, 0.1);
+        assertEquals(therm.temperature.getScale(), 22.9, 0.1);
+        Thread.sleep(20);
         Temperature temp = (Temperature)fl.getData();
         assertEquals(temp.getScale(),22.9,0.1);
     }

@@ -19,7 +19,7 @@ import java.util.LinkedList;
 public class SnsTmp10KThermometer implements Sensor{
     int id;
     final Collection<Observer> listeners = new LinkedList<Observer>();
-    final Temperature data = new Temperature();
+    final Temperature temperature = new Temperature();
     final Resistance resistance = new Resistance();
     String description;
     final Voltage referenceVoltage;
@@ -36,7 +36,7 @@ public class SnsTmp10KThermometer implements Sensor{
 
     @Override
     public SensorData read() {
-        return data;
+        return temperature;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class SnsTmp10KThermometer implements Sensor{
 
     @Override
     public void notifyListeners() {
-        listeners.forEach((x) -> x.handleEvent(data));
+        listeners.forEach((x) -> x.handleEvent(temperature));
     }
 
     @Override
@@ -67,9 +67,9 @@ public class SnsTmp10KThermometer implements Sensor{
                             * pulldownResistor.getScale()
                             / voltage.getScale()
                                 - pulldownResistor.getScale());
-            this.data.update(b/Math.log(resistance.getScale()/0.09919)
+            this.temperature.update(b/Math.log(resistance.getScale()/0.09919)
                 -273.15);
-            EventWriter.sensorMessage(id, this.data.getScale(), "celsium");
+            EventWriter.sensorMessage(id, this.temperature.getScale(), "celsium");
             this.notifyListeners();
         }
     }

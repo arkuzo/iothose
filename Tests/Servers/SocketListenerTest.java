@@ -50,7 +50,7 @@ public class SocketListenerTest {
         sl.addListener(tl);
         for(String s:outStrings){
             fis.setInput(s);
-            Thread.sleep(20);
+            Thread.sleep(300);
             assertEquals(tl.getData().getResponse(),s);
         }
     }

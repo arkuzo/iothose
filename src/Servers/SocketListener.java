@@ -8,6 +8,10 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SocketListener extends Thread implements Observable {
     private Observer listener;
@@ -15,6 +19,7 @@ public class SocketListener extends Thread implements Observable {
     private DataInputStream socketInput;
     private byte[] response=new byte[2048];
     private int length;
+    ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public SocketListener(Observer listener, Socket toListen) {
         EventWriter.write("Creating listener from "+toListen.getInetAddress().getHostAddress());
@@ -48,12 +53,14 @@ public class SocketListener extends Thread implements Observable {
 
     @Override
     public void notifyListeners() {
-        try {
-            listener.handleEvent(new SocketData(new String(response,0,length,"ASCII")));
-            //EventWriter.write("Sent " + new String(response,0,length,"ASCII") + " to observer");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        executorService.submit(()->{
+            try {
+                listener.handleEvent(new SocketData(new String(response,0,length,"ASCII")));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        });
+        
     }
 
     @Override
