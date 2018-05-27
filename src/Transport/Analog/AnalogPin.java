@@ -63,7 +63,7 @@ public class AnalogPin implements Observer, Observable, BoardInterface {
 
     private void parseInput(SocketData data) throws InvalidDataException {
         String response = data.getResponse();
-        if(response.matches("(?s)ACH=\\d{1,2},\\d{3,5}.+")){
+        if(response.matches("(?s)ACH=\\d{1,2},\\d{1,5}.+")){
             String istr, valstr;
             int i, value,start,radix=0;
             if(Character.isDigit(response.charAt(5))){
@@ -78,10 +78,7 @@ public class AnalogPin implements Observer, Observable, BoardInterface {
             else{
                 start=7;
             }
-            while(Character.isDigit(response.charAt(start+radix))){
-                radix++;
-            }
-            valstr=response.substring(start, radix+start);
+            valstr=response.substring(start).trim();
             i=Integer.parseInt(istr);
             value=Integer.parseInt(valstr);
             if(i!=number){

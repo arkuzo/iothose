@@ -6,16 +6,12 @@
 package Factories;
 
 import DatabaseHandlers.EventWriter;
-import Sensors.AmperkaLuminocitySensor;
-import Sensors.Sensor;
-import Sensors.SnsTmp10KThermometer;
-import Sensors.data.Resistance;
+import Sensors.*;
+import Sensors.data.*;
 import Transport.Analog.AnalogPin;
 import core.Launcher;
 import java.io.IOException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.LinkedList;
 
 /**
@@ -55,12 +51,13 @@ public class SensorFactory {
             Sensor sensor;
             switch(type){
                 case "AmperkaLuminocitySensor":
-                    sensor = new AmperkaLuminocitySensor(id,description);
+                    AnalogPin ap = (AnalogPin)BoardIntefaceFactory.getInterfaceById(pinId);
+                    sensor = new AmperkaLuminocitySensor(id,description,ap.getReferenceVoltage());
                     break;
                 case "SNS-TMP10K":
-                    AnalogPin ap = (AnalogPin)BoardIntefaceFactory.getInterfaceById(pinId);
+                    AnalogPin ap1 = (AnalogPin)BoardIntefaceFactory.getInterfaceById(pinId);
                     sensor = new SnsTmp10KThermometer(
-                        ap.getReferenceVoltage(),new Resistance(pulldown),
+                        ap1.getReferenceVoltage(),new Resistance(pulldown),
                                id);
                     break;
                 default:

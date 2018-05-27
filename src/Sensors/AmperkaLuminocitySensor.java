@@ -7,6 +7,7 @@ package Sensors;
 
 import DatabaseHandlers.EventWriter;
 import Sensors.data.Luminocity;
+import Sensors.data.Resistance;
 import Sensors.data.SensorData;
 import Sensors.data.Voltage;
 import core.Data;
@@ -21,19 +22,25 @@ import java.util.LinkedList;
 public class AmperkaLuminocitySensor implements Sensor {
     int id;
     final Collection<Observer> listeners = new LinkedList<Observer>();
-    final Luminocity data = new Luminocity();
+    final Luminocity luminocity = new Luminocity();
     String description;
+    final Resistance resistance = new Resistance();
+    final Voltage referenceVoltage;
+    static final Resistance pullupResistance= new Resistance(9090);
+    static final double multiplicationValue = 32017200;
+    static final double powValue = 1.5832;
 
-    public AmperkaLuminocitySensor(int id, String description) {
+    public AmperkaLuminocitySensor(int id, String description, Voltage referenceVoltage) {
         this.id=id;
         this.description = description;
+        this.referenceVoltage=referenceVoltage;
         EventWriter.write("Created Lightness sensor #"
                 +id+" ("+this.description+")");
     }
 
     @Override
     public void notifyListeners() {
-        listeners.forEach((x) -> x.handleEvent(data));
+        listeners.forEach((x) -> x.handleEvent(luminocity));
     }
 
     @Override
@@ -49,8 +56,12 @@ public class AmperkaLuminocitySensor implements Sensor {
     @Override
     public void handleEvent(Data data) {
         if(data instanceof Voltage){
-            this.data.update(5-((Voltage) data).getScale());
-            EventWriter.sensorMessage(id,(float) this.data.getScale(), "lux");
+            Voltage voltage = ((Voltage) data);
+            resistance.update(pullupResistance.getScale()/
+                    (referenceVoltage.getScale()/voltage.getScale()-1));
+            this.luminocity.update(multiplicationValue/
+                    Math.pow(resistance.getScale(), powValue));
+            EventWriter.sensorMessage(id,(float) this.luminocity.getScale(), "lux");
             this.notifyListeners();
         }
     }
@@ -61,13 +72,13 @@ public class AmperkaLuminocitySensor implements Sensor {
 
     @Override
     public String toString() {
-        return "Luminosity sensor "+data.toString()+" ("+
+        return "Luminosity sensor "+luminocity.toString()+" ("+
                 description+")";
     }
 
     @Override
     public SensorData read() {
-        return data;
+        return luminocity;
     }
 
     @Override

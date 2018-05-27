@@ -7,6 +7,7 @@ package Transport.Analog;
 
 import Sensors.data.Voltage;
 import Servers.SocketData;
+import Transport.FakeListener;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -20,15 +21,41 @@ public class AnalogPinTest {
     }
 
     @Test
-    public void testHandleEvent() {
+    public void testHandleEvent() throws InterruptedException {
         AnalogPin testPin = new AnalogPin(0, 0, 10, 5);
-        assertEquals(testPin.getVoltage().getScale(), 0, 0.01);
-        testPin.handleEvent(new SocketData("ACH=5,819\r\n"));
-        assertEquals(testPin.getVoltage().getScale(), 0, 0.01);
-        testPin.handleEvent(new SocketData("Fake input"));
+        FakeListener fl = new FakeListener();
+        testPin.addListener(fl);
+        Voltage voltage;
         assertEquals(testPin.getVoltage().getScale(), 0, 0.01);
         testPin.handleEvent(new SocketData("ACH=0,819\r\n"));
-        assertEquals(testPin.getVoltage().getScale(), 4, 0.01);
+        Thread.sleep(50);
+        voltage = (Voltage) fl.getData();
+        assertEquals(voltage.getScale(), 4, 0.01);
+        testPin.handleEvent(new SocketData("Fake input"));
+        Thread.sleep(50);
+        voltage = (Voltage) fl.getData();
+        assertEquals(voltage.getScale(), 4, 0.01);
+        testPin.handleEvent(new SocketData("ACH=5,819\r\n"));
+        Thread.sleep(50);
+        voltage = (Voltage) fl.getData();
+        assertEquals(voltage.getScale(), 4, 0.01);
+        testPin.handleEvent(new SocketData("ACH=0,8\r\n"));
+        Thread.sleep(50);
+        voltage = (Voltage) fl.getData();
+        assertEquals(voltage.getScale(), 0.04, 0.01);
+        testPin.handleEvent(new SocketData("ACH=0,81\r\n"));
+        Thread.sleep(50);
+        voltage = (Voltage) fl.getData();
+        assertEquals(voltage.getScale(), 0.4, 0.01);
+        testPin.handleEvent(new SocketData("ACH=0,819\r\n"));
+        Thread.sleep(50);
+        voltage = (Voltage) fl.getData();
+        assertEquals(voltage.getScale(), 4, 0.01);
+        testPin.handleEvent(new SocketData("ACH=0,81900\r\n"));
+        Thread.sleep(50);
+        voltage = (Voltage) fl.getData();
+        assertEquals(voltage.getScale(), 4, 0.01);
+       // fail("Test isn't finished");
     }
     
 }
