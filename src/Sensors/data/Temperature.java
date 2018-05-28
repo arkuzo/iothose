@@ -11,24 +11,37 @@ package Sensors.data;
  */
 public class Temperature implements SensorData{
     
-    private double temperature;
+    private double celsium;
 
     public Temperature() {
-        temperature=0;
+        celsium=0;
     }
 
-    public Temperature(double temperature) {
-        this.temperature = temperature;
+    public Temperature(double celsium) {
+        this.celsium = celsium;
     }
     
-    @Override
-    public double getScale() {
-        return temperature;
+    public double getCelsium() {
+        return celsium;
     }
 
-    @Override
-    public void update(double scale) {
-        this.temperature = scale;
+    public void updateCelsium(double scale) {
+        this.celsium = scale;
     }
     
+    public double getKelvin(){
+        return celsium+273.15;
+    }
+    
+    public void updateKelvin(double scale){
+        celsium = scale-273.15;
+    }
+
+    public double getFahrenheit() {
+        return celsium*1.8+32;
+    }
+
+    void updateFahrenheit(double scale) {
+        celsium=(scale-32)*0.5555556;
+    }
 }

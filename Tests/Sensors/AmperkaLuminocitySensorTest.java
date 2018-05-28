@@ -27,16 +27,16 @@ public class AmperkaLuminocitySensorTest {
         FakeListener fl = new FakeListener();
         alr.addListener(fl);
         alr.handleEvent(new Voltage(1));
-        assertEquals(alr.luminocity.getScale(), 155,1);
+        assertEquals(alr.luminocity.getLux(), 155,1);
         alr.handleEvent(new Voltage(0.5));
-        assertEquals(alr.luminocity.getScale(), 560,10);
+        assertEquals(alr.luminocity.getLux(), 560,10);
         alr.handleEvent(new Voltage(4));
-        assertEquals(alr.luminocity.getScale(), 1.92,0.1);
+        assertEquals(alr.luminocity.getLux(), 1.92,0.1);
         alr.handleEvent(new Voltage(0.1));
-        assertEquals(alr.luminocity.getScale(), 8200,100);
+        assertEquals(alr.luminocity.getLux(), 8200,100);
         Thread.sleep(20);
         assertTrue(fl.getData() instanceof Luminocity);
-        assertEquals(((Luminocity)fl.getData()).getScale(), 8200,100);
+        assertEquals(((Luminocity)fl.getData()).getLux(), 8200,100);
     }
 
 }

@@ -10,55 +10,21 @@ import java.io.UnsupportedEncodingException;
 import java.net.UnknownHostException;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Before;
 
 /**
  *
  * @author arseniy
  */
 public class ArduinoTest {
-    FakeInputStream fis = new FakeInputStream();
-    FakeSocket fs = new FakeSocket(fis);
     FakeListener fl = new FakeListener();
-    FakeOutputStream fos;
-    Arduino ard;
+    Arduino ard = new Arduino(0, "test");
     
     public ArduinoTest() {
-    }
-    
-    @Before
-    public void setUp () throws UnknownHostException{
-        fos = fs.getFos();
-        ard = new Arduino(0, fs, "test");
-    }
-
-    @Test
-    public void testSetSocket() throws UnknownHostException {
-        FakeSocket fs2 = new FakeSocket(fis);
-        SocketListener sl = ard.getSocketListener();
-        assertEquals(ard.getSocketListener(), sl);
-        ard.setSocket(fs2);
-        assertNotEquals(ard.getSocketListener(), sl);
-        
     }
 
     @Test
     public void testGetID() throws UnknownHostException {
         assertEquals(ard.getID(), 0);
-    }
-
-    @Test
-    public void testSend() throws UnknownHostException {
-        ard.send("asdf");
-        assertEquals("asdf", fos.getOutput());
-    }
-
-    @Test
-    public void testIsActive() throws UnsupportedEncodingException, InterruptedException {
-        ard.send("AT\r\n");
-        assertEquals("AT\r\n", fos.getOutput());
-        fis.setInput("OK\r\n");
-        assertTrue(ard.isActive());
     }
 
     @Test

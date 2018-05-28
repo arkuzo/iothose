@@ -11,10 +11,7 @@ import Transport.Digital.DigitalPin;
 import Transport.pinMode;
 import core.Launcher;
 import java.io.IOException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLDataException;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.LinkedList;
 import Transport.BoardInterface;
 
@@ -74,7 +71,13 @@ public class BoardIntefaceFactory {
                             + "interface id:"+id);
             }
             boardInterfaces.add(bInterface);
-            TransportFactory.getTransport(trasnportId).addListener(bInterface);
+            try {
+                TransportFactory.getTransport(trasnportId).addListener(bInterface);
+            } catch (TransportNotFoundException ex) {
+                EventWriter.writeError("Board interface id " + id 
+                        + "is configured to work with transport id "+ trasnportId +
+                        " that cannot be found");
+            }
         }
         EventWriter.write("Loaded board interfaces from db");
     }

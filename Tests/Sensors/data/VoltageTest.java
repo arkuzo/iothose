@@ -16,8 +16,10 @@ public class VoltageTest {
     @Test
     public void testGetScale() {
         Voltage testVoltage = new Voltage (0);
-        assertEquals(testVoltage.getScale(),.0);
+        assertEquals(testVoltage.getVolts(),.0,0.01);
         testVoltage.update(2);
-        assertEquals(testVoltage.getScale(),2,0.001);
+        assertEquals(testVoltage.getVolts(),2,0.001);
+        testVoltage = new Voltage(15);
+        assertEquals(testVoltage.getVolts(),15,0.001);
     }
 }

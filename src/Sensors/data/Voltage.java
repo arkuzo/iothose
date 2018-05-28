@@ -16,14 +16,12 @@ public class Voltage implements SensorData {
         this.voltage = voltage;
     }
     
-    @Override
-    public double getScale() {
+    public double getVolts() {
         return this.voltage;
     }
 
-    @Override
-    public void update(double scale) {
-        this.voltage=(float)scale;
+    public void update(double volts) {
+        this.voltage=volts;
     }
 
     @Override

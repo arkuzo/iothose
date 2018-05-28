@@ -11,24 +11,22 @@ package Sensors.data;
  */
 public class Luminocity implements SensorData {
     
-    float lux;
+    double lux;
 
     public Luminocity() {
         lux=0;
     }
 
-    public Luminocity(float lumens) {
-        this.lux = lumens;
+    public Luminocity(float lux) {
+        this.lux = lux;
     }
 
-    @Override
-    public double getScale() {
+    public double getLux() {
         return lux;
     }
 
-    @Override
-    public void update(double scale) {
-        this.lux =(float) scale;
+    public void updateLux(double lux) {
+        this.lux = lux;
     }
     
 }

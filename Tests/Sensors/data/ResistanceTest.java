@@ -13,24 +13,17 @@ import static org.junit.Assert.*;
  *
  * @author arseniy
  */
-public class LuminocityTest {
-    Luminocity lum = new Luminocity();
-    
+public class ResistanceTest {
 
-    public LuminocityTest() {
-    }
-
-    @Test
-    public void testGetLux() {
-        assertEquals(lum.getLux(), 0, 0.001);
-        lum=new Luminocity(4);
-        assertEquals(lum.getLux(), 4, 0.001);
+    public ResistanceTest() {
     }
 
     @Test
     public void testUpdate() {
-        lum.updateLux(2);
-        assertEquals(lum.getLux(), 2, 0.001);
+        Resistance res = new Resistance(10000);
+        assertEquals(res.getOhms(), 10000, 0.01);
+        res.update(15000);
+        assertEquals(res.getOhms(), 15000, 0.01);
     }
 
 }

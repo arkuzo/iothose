@@ -27,17 +27,17 @@ public class SnsTmp10KThermometerTest {
         FakeListener fl = new FakeListener();
         therm.addListener(fl);
         therm.handleEvent(new Voltage(2.283));
-        assertEquals(therm.resistance.getScale(), 10821, 100);
-        assertEquals(therm.temperature.getScale(), 22.9, 0.1);
+        assertEquals(therm.resistance.getOhms(), 10821, 100);
+        assertEquals(therm.temperature.getCelsium(), 22.9, 0.1);
         therm.handleEvent(new Voltage(1.2));
-        assertEquals(therm.resistance.getScale(), 28700, 100);
-        assertEquals(therm.temperature.getScale(), 0, 0.1);
+        assertEquals(therm.resistance.getOhms(), 28700, 100);
+        assertEquals(therm.temperature.getCelsium(), 0, 0.1);
         therm.handleEvent(new Voltage(4.5));
-        assertEquals(therm.resistance.getScale(), 990, 100);
-        assertEquals(therm.temperature.getScale(), 100, 1);
+        assertEquals(therm.resistance.getOhms(), 990, 100);
+        assertEquals(therm.temperature.getCelsium(), 100, 1);
         Thread.sleep(20);
         Temperature temp = (Temperature)fl.getData();
-        assertEquals(temp.getScale(),100, 1);
+        assertEquals(temp.getCelsium(),100, 1);
     }
 
 }

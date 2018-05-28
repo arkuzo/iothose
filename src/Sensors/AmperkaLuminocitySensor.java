@@ -57,11 +57,11 @@ public class AmperkaLuminocitySensor implements Sensor {
     public void handleEvent(Data data) {
         if(data instanceof Voltage){
             Voltage voltage = ((Voltage) data);
-            resistance.update(pullupResistance.getScale()/
-                    (referenceVoltage.getScale()/voltage.getScale()-1));
-            this.luminocity.update(multiplicationValue/
-                    Math.pow(resistance.getScale(), powValue));
-            EventWriter.sensorMessage(id,(float) this.luminocity.getScale(), "lux");
+            resistance.update(pullupResistance.getOhms()/
+                    (referenceVoltage.getVolts()/voltage.getVolts()-1));
+            this.luminocity.updateLux(multiplicationValue/
+                    Math.pow(resistance.getOhms(), powValue));
+            EventWriter.sensorMessage(id,(float) this.luminocity.getLux(), "lux");
             this.notifyListeners();
         }
     }

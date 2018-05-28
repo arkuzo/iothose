@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Transport;
-
-import Servers.SocketListener;
-import core.Observable;
-import core.Observer;
-import java.net.Socket;
+package Factories;
 
 /**
  *
  * @author arseniy
  */
-public interface Transport extends Runnable, Observer, Observable {
+public class TransportNotFoundException extends Exception {
+
+    public TransportNotFoundException() {
+    }
     
-    public int getID();
+    public TransportNotFoundException(String errMsg) {
+        super(errMsg);
+    }
     
 }

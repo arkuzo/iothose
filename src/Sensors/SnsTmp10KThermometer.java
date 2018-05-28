@@ -63,13 +63,13 @@ public class SnsTmp10KThermometer implements Sensor{
     public void handleEvent(Data data) {
         if(data instanceof Voltage){
             Voltage voltage = (Voltage) data;
-            resistance.update(referenceVoltage.getScale()
-                            * pulldownResistor.getScale()
-                            / voltage.getScale()
-                                - pulldownResistor.getScale());
-            this.temperature.update(b/Math.log(resistance.getScale()/0.09919)
+            resistance.update(referenceVoltage.getVolts()
+                            * pulldownResistor.getOhms()
+                            / voltage.getVolts()
+                                - pulldownResistor.getOhms());
+            this.temperature.updateCelsium(b/Math.log(resistance.getOhms()/0.09919)
                 -273.15);
-            EventWriter.sensorMessage(id, this.temperature.getScale(), "celsium");
+            EventWriter.sensorMessage(id, this.temperature.getCelsium(), "celsium");
             this.notifyListeners();
         }
     }

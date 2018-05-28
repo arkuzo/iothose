@@ -21,14 +21,12 @@ public class Resistance implements SensorData{
         this.ohms = ohms;
     }
 
-    @Override
-    public double getScale() {
+    public double getOhms() {
         return ohms;
     }
 
-    @Override
-    public void update(double scale) {
-        ohms=scale;
+    public void update(double ohms) {
+        this.ohms=ohms;
     }
     
 }

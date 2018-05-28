@@ -46,7 +46,7 @@ public class TransportServer implements Runnable {
         return server;
     }
     
-    static public void startListen (SocketListener socketListener){
+    static private void startListen (SocketListener socketListener){
         socketExService.submit(socketListener);
     }
     
@@ -62,15 +62,10 @@ public class TransportServer implements Runnable {
                 EventWriter.writeError("Transport connection failed");
                 continue;
             }
-            try {
-                if(socket==null){
-                    System.out.println("It seems that we lost socket");
-                }
-                TransportFactory.getTransport(1).setSocket(socket);
-                EventWriter.write("Set socket for transport");
-            } catch (IOException ex) {
-                EventWriter.writeError("Error binding socket\n"+ex.toString());
+            if(socket==null){
+                System.out.println("It seems that we lost socket");
             }
+            startListen(new SocketListener(socket));
         }
         EventWriter.write("Transport server closed");
     }

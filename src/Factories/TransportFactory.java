@@ -10,7 +10,6 @@ import Transport.Arduino;
 import Transport.Transport;
 import core.Launcher;
 import java.io.*;
-import java.net.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,15 +45,16 @@ public class TransportFactory{
         return factory;
     }
     
-    public static Transport getTransport (int id) throws UnknownHostException, IOException{
+    public static Transport getTransport (int id)throws IOException, TransportNotFoundException{
+        if (id == 0){
+            return new Arduino(0, "test");
+        }
         for (Transport b : boards) {
             if(b.getID()==id){
                 return b;
             }
         }
-        Transport b = (Transport) new Arduino(id,"test");
-        boards.add(b);
-        return b;
+        throw new TransportNotFoundException();
     }
     
     private void getTransportFromDb() throws SQLException{
@@ -73,10 +73,6 @@ public class TransportFactory{
             sb.append(b+"\r\n");
         }
         EventWriter.write(sb.toString());
-    }
-    
-    private void addTransportToDb(){
-        
     }
     
 }

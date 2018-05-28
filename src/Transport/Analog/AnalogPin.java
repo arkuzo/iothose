@@ -87,7 +87,7 @@ public class AnalogPin implements Observer, Observable, BoardInterface {
             if(value>(float)Math.pow(2,resolution))
                 throw new InvalidDataException("Analog value failure");
             this.voltage.update(value/(float)Math.pow(2,resolution)
-                    *reference.getScale());
+                    *reference.getVolts());
             EventWriter.write(this.toString());
             updated = true;
         }

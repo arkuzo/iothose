@@ -5,6 +5,7 @@
  */
 package Servers;
 
+import Transport.Transport;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -26,7 +27,7 @@ public class SocketListenerTest {
     
     public SocketListenerTest() throws UnsupportedEncodingException {
         this.fs = new FakeSocket(fis);
-        this.sl = new SocketListener(tl,fs);
+        this.sl = new SocketListener(fs);
     }
     
     @Test
@@ -47,7 +48,10 @@ public class SocketListenerTest {
     public void testUpdate() throws UnsupportedEncodingException, InterruptedException {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.submit(sl);
-        sl.addListener(tl);
+        fis.setInput("ID=0\r\n");
+        Thread.sleep(300);
+        assertEquals(((Transport)sl.listener).getID(), 0);
+        ((Transport)sl.listener).addListener(tl);
         for(String s:outStrings){
             fis.setInput(s);
             Thread.sleep(300);
