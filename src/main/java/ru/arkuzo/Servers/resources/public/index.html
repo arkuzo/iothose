@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<title>My Web</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="w3.css">
+
+<body>
+<div class="w3-container w3-green">
+	<h1>Smarthome</h1>
+	<p>Here i will provide sensors data</p>
+	<button id="btn" class="w3-button" onclick="alertHello()">Hello!</button>
+</div>
+<div class="w3-container w3-grey">
+	<p id="para">Haven't seen any click</p>
+</div>
+<script>
+
+function alertHello() {
+	document.getElementById("para").innerHTML = "Seen click";
+}
+</script>
+</body>
+
+</html>
+
